@@ -2,5 +2,36 @@
 title: "Proportion of red beads"
 author: "Ayush Chandra"
 format: html
+execute: 
+  echo: false
 ---
 
+
+```{r}
+#| message: false
+library(tidymodels)
+library(broom) 
+```
+
+```{r}
+#| cache: true
+#| \begin{equation}
+Y = 3.25 + 1.47X_1 - 0.62X_2 + 2.89X_3 + \varepsilon
+\end{equation}
+```
+
+```{r}
+library(broom)
+library(dplyr)
+library(knitr)
+
+# Example: Fit a linear model
+model <- lm(mpg ~ wt + hp, data = mtcars)
+
+# Tidy it and format with kable
+tidy(model) %>%
+  mutate(across(where(is.numeric), round, 3)) %>%
+  kable(caption = "Linear Regression Results: mpg ~ wt + hp")
+
+```
+A potential weakness is that our sample of beads might not be perfectly representative of the entire urn, especially if some beads are more likely to be scooped than others.
