@@ -13,25 +13,22 @@ library(tidymodels)
 library(broom) 
 ```
 
-```{r}
-#| cache: true
-#| \begin{equation}
-Y = 3.25 + 1.47X_1 - 0.62X_2 + 2.89X_3 + \varepsilon
-\end{equation}
-```
 
 ```{r}
 library(broom)
 library(dplyr)
 library(knitr)
+library(gt)
+library(marginaleffects)
 
-# Example: Fit a linear model
-model <- lm(mpg ~ wt + hp, data = mtcars)
-
-# Tidy it and format with kable
-tidy(model) %>%
+tidy(urn) %>%
   mutate(across(where(is.numeric), round, 3)) %>%
-  kable(caption = "Linear Regression Results: mpg ~ wt + hp")
+  gt() %>%
+  tab_header(
+    title = "Linear Regression Results",
+    subtitle = "Predicting mpg from wt and hp"
+  )
+
 
 ```
-A potential weakness is that our sample of beads might not be perfectly representative of the entire urn, especially if some beads are more likely to be scooped than others.
+Estimating proportions important in statistics, especially when dealing with random outcomes. Using a simulated bowl of 1,000 beads, we investigate what proportion of beads are red. A potential weakness is that our sample of beads might not be perfectly representative of the entire urn, especially if some beads are more likely to be scooped than others.The model has covariates such as size or placement in the urn, while the color is the main outcome. Based on our analysis, we estimate that about 34% of beads scooped with the shovel will be red, with a high confidence interval.
