@@ -15,19 +15,34 @@ library(broom)
 
 
 ```{r}
-library(broom)
-library(dplyr)
-library(knitr)
-library(gt)
+#| message = false
+#| echo: false
+library(ggplot2)
 library(marginaleffects)
 
-tidy(urn) %>%
-  mutate(across(where(is.numeric), round, 3)) %>%
-  gt() %>%
-  tab_header(
-    title = "Linear Regression Results",
-    subtitle = "Predicting mpg from wt and hp"
+# Generate prediction data without drawing the plot
+pred_data <- plot_predictions(fit_beads, type = "prob", condition = "bead_type", draw = FALSE)
+
+# Create a styled plot
+ggplot(pred_data, aes(x = bead_type, y = estimate, fill = bead_type)) +
+  geom_col(width = 0.6, color = "white", show.legend = FALSE) +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, color = "black") +
+  labs(
+    title = "Predicted Probability by Bead Type",
+    subtitle = "Certain bead types are significantly more likely to appear",
+    x = "Bead Type",
+    y = "Predicted Probability",
+    caption = "Source: Model output via marginaleffects::plot_predictions()"
+  ) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16),
+    plot.subtitle = element_text(margin = margin(b = 10)),
+    axis.title = element_text(face = "bold"),
+    panel.grid.major.y = element_line(color = "gray90")
   )
+
 
 
 ```
